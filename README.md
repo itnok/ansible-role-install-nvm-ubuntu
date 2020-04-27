@@ -1,7 +1,7 @@
 install-nvm-ubuntu
 ===================
 
-[![Build Status](https://travis-ci.org/itnok/ansible-role-install-nvm-ubuntu.svg?branch=master)](https://travis-ci.org/itnok/ansible-role-install-nvm-ubuntu) [![GitHub tag](https://img.shields.io/github/v/tag/itnok/ansible-role-install-nvm-ubuntu?sort=semver)](https://github.com/itnok/ansible-role-install-nvm-ubuntu/tags/) [![Ansible Role](https://img.shields.io/ansible/role/???)](https://galaxy.ansible.com/itnok/install_nvm_ubuntu)
+[![Build Status](https://travis-ci.org/itnok/ansible-role-install-nvm-ubuntu.svg?branch=master)](https://travis-ci.org/itnok/ansible-role-install-nvm-ubuntu) [![GitHub tag](https://img.shields.io/github/v/tag/itnok/ansible-role-install-nvm-ubuntu?sort=semver)](https://github.com/itnok/ansible-role-install-nvm-ubuntu/tags/) [![Ansible Role](https://img.shields.io/ansible/role/48278)](https://galaxy.ansible.com/itnok/install_nvm_ubuntu)
 
 Install NVM & Node.js on an Ubuntu host.
 
