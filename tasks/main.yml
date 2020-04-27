@@ -1,0 +1,67 @@
+---
+# tasks file for ansible-role-install-nvm-ubuntu
+- include_vars: "main.yml"
+
+- name: "Gather facts"
+  setup:    # equivalent to "gather_facts: yes"
+
+- name: "Install NVM dependencies"
+  include_role:
+    name: itnok.manage_pkg_ubuntu
+  vars:
+    manage_pkg_app:
+      - "git"
+      - "curl"
+      - "libssl-dev"
+      - "build-essential"
+
+- name: "Find latest NVM release available"
+  shell: >
+    git ls-remote --tags https://github.com/nvm-sh/nvm.git | awk '{print $2}' | sed 's~refs/tags/~~g' | grep -ve '[\^\{\}]' | sort -V | tail -n1
+  register: latest_nvm_release
+  when: install_nvm != "latest"
+
+- name: "Use real NVM release version for 'latest'"
+  set_fact:
+    install_nvm: "{{ latest_nvm_release.stdout }}"
+  when: latest_nvm_release is defined
+
+- name: "Prepare to automagically source NVM in ~/.bashrc"
+  blockinfile:
+    path: "~/.bashrc"
+    block: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  become: yes
+  become_user: "{{ install_nvm_user }}"
+
+- name: "Install NVM"
+  shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ install_nvm }}/install.sh | bash
+  become: yes
+  become_user: "{{ install_nvm_user }}"
+
+- name: "Install node {{ install_nvm_node }}"
+  command: >
+    nvm install {{ install_nvm_node }}
+  register: nvm_install_result
+  changed_when: not "is already installed." in nvm_install_result.stdout
+  become: yes
+  become_user: "{{ install_nvm_user }}"
+
+- name: "Check if {{ install_nvm_node }} is the current default version"
+  shell: >
+    nvm ls | grep -e 'default -> {{ install_nvm_node }}'
+  register: install_nvm_check_default
+  changed_when: False
+  ignore_errors: True
+  become: yes
+  become_user: "{{ install_nvm_user }}"
+
+- name: "Set default node version to {{ install_nvm_node }}"
+  command: >
+    nvm alias default {{ install_nvm_node }}
+  when: install_nvm_check_default|failed
+  become: yes
+  become_user: "{{ install_nvm_user }}"
