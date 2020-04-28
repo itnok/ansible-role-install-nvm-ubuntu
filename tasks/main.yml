@@ -64,7 +64,7 @@
 - name: "Set default node version to {{ install_nvm_node }}"
   shell: >
     nvm alias default {{ install_nvm_node }}
-  executalbe: "/bin/bash"
+  executable: "/bin/bash"
   when: install_nvm_check_default|failed
   become: yes
   become_user: "{{ install_nvm_user }}"
