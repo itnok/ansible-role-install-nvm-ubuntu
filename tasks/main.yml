@@ -47,14 +47,14 @@
 - name: "Install node {{ install_nvm_node }}"
   shell: >
     nvm install {{ install_nvm_node }} 2>&1
-  executalbe: "/bin/bash"
+  executable: "/bin/bash"
   become: yes
   become_user: "{{ install_nvm_user }}"
 
 - name: "Check if {{ install_nvm_node }} is the current default version"
   shell: >
     nvm ls | grep -e 'default -> {{ install_nvm_node }}'
-  executalbe: "/bin/bash"
+  executable: "/bin/bash"
   register: install_nvm_check_default
   changed_when: no
   ignore_errors: yes
