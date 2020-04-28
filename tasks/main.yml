@@ -23,8 +23,7 @@
 
 - name: "Use real NVM release version for 'latest'"
   set_fact:
-    install_nvm: "{{ latest_nvm_release.stdout }}"
-  when: latest_nvm_release.stdout is defined
+    install_nvm_version: "{{ latest_nvm_release.stdout|default(install_nvm) }}"
 
 - name: "Prepare to automagically source NVM in ~/.bashrc"
   blockinfile:
@@ -38,7 +37,7 @@
 
 - name: "Install NVM"
   shell: >
-    curl -o- -sL https://raw.githubusercontent.com/nvm-sh/nvm/{{ install_nvm }}/install.sh | bash
+    curl -o- -sL https://raw.githubusercontent.com/nvm-sh/nvm/{{ install_nvm_version }}/install.sh | bash
   args:
     warn: no
   become: yes
