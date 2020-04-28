@@ -48,7 +48,7 @@
   command: >
     nvm install {{ install_nvm_node }} 2>&1
   register: install_nvm_result
-  changed_when: "'is already installed.' not in install_nvm_result.stdout"
+  changed_when: "'is already installed.' not in install_nvm_result['stdout']"
   become: yes
   become_user: "{{ install_nvm_user }}"
 
