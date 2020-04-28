@@ -19,6 +19,7 @@
   shell: >
     git ls-remote --tags https://github.com/nvm-sh/nvm.git | awk '{print $2}' | sed 's~refs/tags/~~g' | grep -ve '[\^\{\}]' | sort -V | tail -n1
   register: latest_nvm_release
+  changed_when: no
   when: install_nvm == "latest"
 
 - name: "Use real NVM release version for 'latest'"
@@ -45,9 +46,9 @@
 
 - name: "Install node {{ install_nvm_node }}"
   command: >
-    nvm install {{ install_nvm_node }}
-  register: nvm_install_result
-  changed_when: "'is already installed.' not in nvm_install_result.stdout"
+    nvm install {{ install_nvm_node }} 2>&1
+  register: install_nvm_result
+  changed_when: "'is already installed.' not in install_nvm_result.stdout"
   become: yes
   become_user: "{{ install_nvm_user }}"
 
