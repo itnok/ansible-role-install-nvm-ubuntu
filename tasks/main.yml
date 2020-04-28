@@ -47,7 +47,7 @@
   command: >
     nvm install {{ install_nvm_node }}
   register: nvm_install_result
-  changed_when: not "is already installed." in nvm_install_result.stdout
+  changed_when: "'is already installed.' not in nvm_install_result.stdout"
   become: yes
   become_user: "{{ install_nvm_user }}"
 
@@ -55,8 +55,8 @@
   shell: >
     nvm ls | grep -e 'default -> {{ install_nvm_node }}'
   register: install_nvm_check_default
-  changed_when: False
-  ignore_errors: True
+  changed_when: no
+  ignore_errors: yes
   become: yes
   become_user: "{{ install_nvm_user }}"
 
