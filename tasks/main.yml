@@ -47,14 +47,16 @@
 - name: "Install node {{ install_nvm_node }}"
   shell: >
     nvm install {{ install_nvm_node }} 2>&1
-  executable: "/bin/bash"
+  args:
+    executable: "/bin/bash"
   become: yes
   become_user: "{{ install_nvm_user }}"
 
 - name: "Check if {{ install_nvm_node }} is the current default version"
   shell: >
     nvm ls | grep -e 'default -> {{ install_nvm_node }}'
-  executable: "/bin/bash"
+  args:
+    executable: "/bin/bash"
   register: install_nvm_check_default
   changed_when: no
   ignore_errors: yes
@@ -64,7 +66,8 @@
 - name: "Set default node version to {{ install_nvm_node }}"
   shell: >
     nvm alias default {{ install_nvm_node }}
-  executable: "/bin/bash"
+  args:
+    executable: "/bin/bash"
   when: install_nvm_check_default|failed
   become: yes
   become_user: "{{ install_nvm_user }}"
