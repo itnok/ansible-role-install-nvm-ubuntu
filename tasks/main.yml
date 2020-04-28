@@ -49,6 +49,7 @@
     source ~/.nvm/nvm.sh && nvm install {{ install_nvm_node }} 2>&1
   args:
     executable: "/bin/bash"
+  changed_when: '"is already installed." not in nvm_install_result.stdout'
   become: yes
   become_user: "{{ install_nvm_user }}"
 
@@ -68,6 +69,6 @@
     source ~/.nvm/nvm.sh && nvm alias default {{ install_nvm_node }}
   args:
     executable: "/bin/bash"
-  when: install_nvm_check_default|failed
+  when: install_nvm_check_default.rc == 1
   become: yes
   become_user: "{{ install_nvm_user }}"
